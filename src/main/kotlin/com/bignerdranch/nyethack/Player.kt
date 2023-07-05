@@ -3,13 +3,17 @@ package com.bignerdranch.nyethack
 class Player (
     initialName: String,
     val hometown: String  = "Neversummer",
-    var healthPoints: Int,
-    val isImmortal: Boolean ) {
-    var name = "madrigal"
+    override var healthPoints: Int,
+    val isImmortal: Boolean
+) : Fightable {
+
+    override var name = "madrigal"
         get() = field.replaceFirstChar { it.uppercase() }
         private set(value) {
             field = value.trim()
         }
+    override val diceCount = 3
+    override val diceSides = 4
 
     val title: String
         get() = when {
@@ -33,7 +37,11 @@ class Player (
             "best the world-eater"
         ).random()
     }
-
+    override fun takeDamage(damage: Int) {
+        if (!isImmortal) {
+            healthPoints -= damage
+        }
+    }
 
     init {
         require(healthPoints > 0) { "healthPoints must be greater than zero" }
